@@ -3,7 +3,7 @@ title: Java实现简单爬虫
 date: 2019-06-26 15:38:21
 edited:
 tags: Java入门
-categories: Java
+categories: Java学习
 ---
 怎么用Java比较简单地去网上爬一些东西呢，比如一些图片。作为Java小白（在此之前，都不知道爬虫是个什么，hhh..）最近遇到这个问题，去网上找了一些思路。大致是这样的：
 

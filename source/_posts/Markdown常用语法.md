@@ -2,8 +2,8 @@
 title: Markdown(md)常用语法
 date: 2019-01-20 20:08:20
 edited:
-tags: md
-categories: hexo博客搭建
+tags: hexo博客搭建
+categories: 
 ---
 # Markdown简介
 > **Markdown即md语法，是一种轻量级标记语言，创始人为约翰·格鲁伯(英语：John Gruber)它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)档”。该语法对于图片，图表、数学式都有支持，当前许多网站都广泛使用 Markdown 来撰写帮助文档或是用于论坛上发表消息。例如：GitHub、reddit、简书、hexo博客。————维基百科**

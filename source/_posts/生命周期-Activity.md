@@ -8,6 +8,7 @@ categories: Android
 ## 回调方法介绍
 **说起Activity的生命周期想必离不开一幅图**<!--more-->
 ![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy8xMjIzOTgxNy01N2JiMzRiYmYyMDE4NTNkLnBuZw)
+
 方法|描述|常用情景
 :---:|:---:|:---:
 onCreate()|当活动第一次创建时调用|初始化数据，加载布局，绑定事件等

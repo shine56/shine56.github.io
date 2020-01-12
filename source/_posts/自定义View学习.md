@@ -67,8 +67,10 @@ int heightSize = MeasureSpec.getMode(heightMeasureSpec);//取出的高度
 int heightMode = MeasureSpec.getMode(heightMeasureSpec);//取出的测量模式
 ```
 这个测量模式有三种，如下表：
+
+
 |测量模式| 二进制数值 |描述|
-|--|--|--
+|:---:|:---:|:---:|
 |  UNSPECIFIED|  00|默认值，父控件没有给子view任何限制，子View可以设置为任意大小。
 |EXACTLY| 01|表示父控件已经确切的指定了子View的大小。
 |AT_MOST| 10|表示子View具体大小没有尺寸限制，但是存在上限，上限一般为父View大小。
