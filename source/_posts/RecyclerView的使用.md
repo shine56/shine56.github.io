@@ -8,7 +8,7 @@ categories: Android
 ## 准备工作
 
 ### 添加依赖
-> implementation ‘com.android.support:recyclerview-v7:28.0.0’
+> implementation "androidx.recyclerview:recyclerview:1.1.0"
 
 ### 定义适配器
 这个控件使用方法和ListView差不多，都需要先自定义一个布局和一个适配类型，但是适配器的构造不一样，下面是适配器的代码，解析在注释。
