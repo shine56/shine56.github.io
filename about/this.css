@@ -1,0 +1,24 @@
+.my-header{
+	width: 120px;
+	border-radius: 100px; 
+	border: 2px solid gray; 
+}
+.my-name{
+	font-family: 宋体;
+	font-size: 26px;
+	text-align: center;
+}
+.my-job{
+	font-size: 15px;
+	text-align: center;
+}
+
+.my-ul li a{
+  color: #0593d3;
+  border-bottom: none;
+}
+
+.my-ul li a:hover{
+	color: #fc6423;
+	border-bottom: 1px solid #fc6423;
+}

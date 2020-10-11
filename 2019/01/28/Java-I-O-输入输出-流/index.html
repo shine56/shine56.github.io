@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
+  </script>
+
+  <meta name="description" content="流？I&#x2F;O？ 流是一组有序的数据序列，根据操作可分为输入流和输出流即（I&#x2F;O流），I&#x2F;O流也可以理解为一种通道程序。而I&#x2F;O包提供给了很多工具(类)对I&#x2F;O流进行操作，从而达到安全地将源数据通过流传送到目的地的目的。源和目的地可以是磁盘，键盘，鼠标，显示器，网络，压缩包等等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java--I&#x2F;O(输入输出)流">
+<meta property="og:url" content="http://yoursite.com/2019/01/28/Java-I-O-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA-%E6%B5%81/index.html">
+<meta property="og:site_name" content="shine56&#39;s blog">
+<meta property="og:description" content="流？I&#x2F;O？ 流是一组有序的数据序列，根据操作可分为输入流和输出流即（I&#x2F;O流），I&#x2F;O流也可以理解为一种通道程序。而I&#x2F;O包提供给了很多工具(类)对I&#x2F;O流进行操作，从而达到安全地将源数据通过流传送到目的地的目的。源和目的地可以是磁盘，键盘，鼠标，显示器，网络，压缩包等等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-28T13:33:49.000Z">
+<meta property="article:modified_time" content="2020-07-31T07:49:13.894Z">
+<meta property="article:author" content="ZQL">
+<meta property="article:tag" content="Java入门">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/01/28/Java-I-O-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA-%E6%B5%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java--I/O(输入输出)流 | shine56's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">shine56's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">唯纯粹与热爱不可辜负</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/28/Java-I-O-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA-%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ZQL">
+      <meta itemprop="description" content="我见青山多妩媚">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="shine56's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java--I/O(输入输出)流
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-01-28 21:33:49" itemprop="dateCreated datePublished" datetime="2019-01-28T21:33:49+08:00">2019-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-31 15:49:13" itemprop="dateModified" datetime="2020-07-31T15:49:13+08:00">2020-07-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">Java学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="流？I-O？"><a href="#流？I-O？" class="headerlink" title="流？I/O？"></a>流？I/O？</h1><blockquote>
+<p>流是一组有序的数据序列，根据操作可分为输入流和输出流即（I/O流），I/O流也可以理解为一种通道程序。而I/O包提供给了很多工具(类)对I/O流进行操作，从而达到安全地将<strong>源数据通过流传送到目的地</strong>的目的。源和目的地可以是磁盘，键盘，鼠标，显示器，网络，压缩包等等。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="输入-输出流"><a href="#输入-输出流" class="headerlink" title="输入/输出流"></a>输入/输出流</h1><h2 id="将数据从流里读取进来——输入流"><a href="#将数据从流里读取进来——输入流" class="headerlink" title="将数据从流里读取进来——输入流"></a>将数据从流里读取进来——输入流</h2><ul>
+<li>I/O包给我们提供给了两个父类进行数据从流读取进来的操作。</li>
+<li>其一<strong>抽象类InputStream</strong>(字节输出流)。该类是所有字节输入流的父类，遇到错误会引发IOException异常。</li>
+<li>其二<strong>抽象类Reader</strong>(字符输出流)，该类适用于处理字符文本，是所有字符输入流的父类。</li>
+</ul>
+<h2 id="将数据输出到流里里边——输出流"><a href="#将数据输出到流里里边——输出流" class="headerlink" title="将数据输出到流里里边——输出流"></a>将数据输出到流里里边——输出流</h2><ul>
+<li>I/O包给我们提供给了两个父类进行数据输出到流的操作。</li>
+<li>其一<strong>OutputStream</strong>(字节输出流)。该类是所有字节输出流的父类，该类所有方法皆返回 <strong>void</strong>，遇到错误会引发IOException异常。</li>
+<li>其二 <strong>Writer</strong>(字符输出流)，该类适用于处理字符文本，是所有字符输出流的父类。</li>
+</ul>
+<h2 id="I-O流常用子类"><a href="#I-O流常用子类" class="headerlink" title="I/O流常用子类"></a>I/O流常用子类</h2><p><strong>看到这便知，输入流与输出流的操作都各有两个类可以操作。另外</strong>Reader<strong>和</strong>Writer<strong>类有两个子类可以对流中的 字节/字符 进行转换输入输出。</strong></p>
+<ul>
+<li>InputStreamReader：将流中的字节转换成字符读取进来。</li>
+<li>OutputStreamWriter: 将字符转换成字节输出到流。</li>
+<li>这两个类通常用作读/写磁盘文件。</li>
+</ul>
+<p><strong>上述的输入/输出流当中有一种子类：带缓存的输入/输出流。缓存是I/O的一种性能优化。缓存流为I/O增加了内存缓存区。</strong></p>
+<p>四个子类(缓存流)如下：</p>
+<ul>
+<li>BufferedInputStream</li>
+<li>BufferedOutputStream</li>
+<li>BufferedReader</li>
+<li>BufferedWriter</li>
+</ul>
+<h1 id="File类"><a href="#File类" class="headerlink" title="File类"></a>File类</h1><p><strong>该类主要用于文件和目录的创建、文件的查找和文件的删除等。File对象代表磁盘中实际存在的文件和目录。可以通过以下构造方法创建一个File对象。</strong></p>
+<h2 id="文件创建"><a href="#文件创建" class="headerlink" title="文件创建"></a>文件创建</h2><blockquote>
+<p>new File(String pathname) 如：File abc = new (“d:/1.txt”);</p>
+</blockquote>
+<blockquote>
+<p>new File(String parent,String child), String parent是父路径字符串， String child是子路径字符串。</p>
+</blockquote>
+<blockquote>
+<p>new File(File f,String child); File f父路径对象，String child是子路径字符串。</p>
+</blockquote>
+<h2 id="获取文件信息"><a href="#获取文件信息" class="headerlink" title="获取文件信息"></a>获取文件信息</h2><ul>
+<li>File提供了许多方法获取文件本身信息。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">返回值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">getNamw()</td>
+<td align="left">String</td>
+<td align="left">获取文件名称</td>
+</tr>
+<tr>
+<td align="left">canRead()</td>
+<td align="left">boolean</td>
+<td align="left">判断文件是否可读</td>
+</tr>
+<tr>
+<td align="left">canWrite()</td>
+<td align="left">boolean</td>
+<td align="left">判断文件是否可写</td>
+</tr>
+<tr>
+<td align="left">exits()</td>
+<td align="left">boolean</td>
+<td align="left">判断文件是否存在</td>
+</tr>
+<tr>
+<td align="left">length()</td>
+<td align="left">long</td>
+<td align="left">获取文件长度(字节为单位)</td>
+</tr>
+<tr>
+<td align="left">getAbsolutePath()</td>
+<td align="left">String</td>
+<td align="left">获取文件绝对路径</td>
+</tr>
+<tr>
+<td align="left">getParent()</td>
+<td align="left">String</td>
+<td align="left">获取文件父路径</td>
+</tr>
+<tr>
+<td align="left">lastModified()</td>
+<td align="left">long</td>
+<td align="left">获取文件最后修改时间</td>
+</tr>
+<tr>
+<td align="left">delete()</td>
+<td align="left">void</td>
+<td align="left">删除文件</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java%E5%85%A5%E9%97%A8/" rel="tag"># Java入门</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/01/27/Java-%E7%B1%BB%E7%9A%84%E4%B8%8A%E4%B8%8B%E8%BD%AC%E5%9E%8B%E4%B8%8E%E6%B3%9B%E5%9E%8B/" rel="prev" title="Java--类的上下转型与泛型">
+      <i class="fa fa-chevron-left"></i> Java--类的上下转型与泛型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/02/08/RecyclerView%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="next" title="RecyclerView的使用">
+      RecyclerView的使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%EF%BC%9FI-O%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">流？I&#x2F;O？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BE%93%E5%85%A5-%E8%BE%93%E5%87%BA%E6%B5%81"><span class="nav-number">2.</span> <span class="nav-text">输入&#x2F;输出流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E4%BB%8E%E6%B5%81%E9%87%8C%E8%AF%BB%E5%8F%96%E8%BF%9B%E6%9D%A5%E2%80%94%E2%80%94%E8%BE%93%E5%85%A5%E6%B5%81"><span class="nav-number">2.1.</span> <span class="nav-text">将数据从流里读取进来——输入流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E8%BE%93%E5%87%BA%E5%88%B0%E6%B5%81%E9%87%8C%E9%87%8C%E8%BE%B9%E2%80%94%E2%80%94%E8%BE%93%E5%87%BA%E6%B5%81"><span class="nav-number">2.2.</span> <span class="nav-text">将数据输出到流里里边——输出流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O%E6%B5%81%E5%B8%B8%E7%94%A8%E5%AD%90%E7%B1%BB"><span class="nav-number">2.3.</span> <span class="nav-text">I&#x2F;O流常用子类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#File%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">File类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BA"><span class="nav-number">3.1.</span> <span class="nav-text">文件创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF"><span class="nav-number">3.2.</span> <span class="nav-text">获取文件信息</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ZQL</p>
+  <div class="site-description" itemprop="description">我见青山多妩媚</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZQL</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
