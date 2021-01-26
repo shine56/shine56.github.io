@@ -20,28 +20,41 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"./public/search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Alec&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="基本知识事件传递的三个主体 Activity  ViewGroup  View 他们三个的嵌套关系一般是这样：  但是还要明白的是：    ViewGroup当然可以嵌套ViewGroup，即ViewGroup也可以是另一个ViewGroup的子View。   ViewGroup其实是继承于View，是View的子类。  事件分发机制相关三个经典函数 dispatchTouchEvent()：分发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android事件分发机制">
+<meta property="og:url" content="http://yoursite.com/2020/07/26/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/index.html">
 <meta property="og:site_name" content="Alec&#39;s blog">
+<meta property="og:description" content="基本知识事件传递的三个主体 Activity  ViewGroup  View 他们三个的嵌套关系一般是这样：  但是还要明白的是：    ViewGroup当然可以嵌套ViewGroup，即ViewGroup也可以是另一个ViewGroup的子View。   ViewGroup其实是继承于View，是View的子类。  事件分发机制相关三个经典函数 dispatchTouchEvent()：分发">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201205214221385.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20170323112419186?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2FpZmVuZ3lhbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center#pic_center">
+<meta property="og:image" content="https://img-blog.csdn.net/20170323112631219?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2FpZmVuZ3lhbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="https://img-blog.csdn.net/20170323134336096?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2FpZmVuZ3lhbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center#pic_center">
+<meta property="og:image" content="https://img-blog.csdn.net/20170323134404582?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2FpZmVuZ3lhbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="https://img-blog.csdn.net/20170323142246256?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2FpZmVuZ3lhbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center#pic_center">
+<meta property="og:image" content="https://img-blog.csdn.net/20170323142300272?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY2FpZmVuZ3lhbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="article:published_time" content="2020-07-26T14:24:12.000Z">
+<meta property="article:modified_time" content="2021-01-26T14:29:14.117Z">
 <meta property="article:author" content="Alec">
+<meta property="article:tag" content="Android学习">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201205214221385.png">
 
-<link rel="canonical" href="http://yoursite.com/">
+<link rel="canonical" href="http://yoursite.com/2020/07/26/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Alec's blog</title>
+  <title>Android事件分发机制 | Alec's blog</title>
   
 
 
@@ -140,162 +153,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/19/2020%E5%B9%B4%E5%B0%8F%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/19/2020%E5%B9%B4%E5%B0%8F%E7%BB%93/" class="post-title-link" itemprop="url">2020年小结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-19 23:24:10" itemprop="dateCreated datePublished" datetime="2021-01-19T23:24:10+08:00">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-25 16:40:57" itemprop="dateModified" datetime="2021-01-25T16:40:57+08:00">2021-01-25</time>
-              </span>
-
-          
-
-        </div>
-      </header>
 
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>写下这篇小结的时候，刚结束了大三上这一学期，我坐在广州南的高铁站候车区，等候着回家的列车。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/19/2020%E5%B9%B4%E5%B0%8F%E7%BB%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/02/%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E4%BF%A1%E6%81%AF%E6%8C%89%E5%BA%8F%E5%88%B0%E8%BE%BE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/02/%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E4%BF%A1%E6%81%AF%E6%8C%89%E5%BA%8F%E5%88%B0%E8%BE%BE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">异步回调信息按序到达解决方案</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-11-02 15:42:45" itemprop="dateCreated datePublished" datetime="2020-11-02T15:42:45+08:00">2020-11-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-21 20:06:58" itemprop="dateModified" datetime="2021-01-21T20:06:58+08:00">2021-01-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" itemprop="url" rel="index"><span itemprop="name">问题解决</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="情景"><a href="#情景" class="headerlink" title="情景"></a>情景</h1><p>在尝试自定义一个Html.TagHandler解析一段图文混排的文本时遇到一个问题：IO线程加载多张图像时，它们的回调时间是不可控的，导致他们插入到文本中的位置出错。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/11/02/%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E4%BF%A1%E6%81%AF%E6%8C%89%E5%BA%8F%E5%88%B0%E8%BE%BE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -311,10 +172,9 @@
       <meta itemprop="name" content="Alec's blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/26/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">Android事件分发机制</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Android事件分发机制
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -353,7 +213,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="事件传递的三个主体"><a href="#事件传递的三个主体" class="headerlink" title="事件传递的三个主体"></a>事件传递的三个主体</h2><ul>
+        <h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="事件传递的三个主体"><a href="#事件传递的三个主体" class="headerlink" title="事件传递的三个主体"></a>事件传递的三个主体</h2><ul>
 <li><p>Activity</p>
 </li>
 <li><p>ViewGroup</p>
@@ -439,568 +299,37 @@
 <li>对于较大量的信息，命令传送，可以先派一个小兵嗅探一下，记录可行的路线，后续信息按路线分发。</li>
 </ul>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/Android%E5%AD%A6%E4%B9%A0/" rel="tag"># Android学习</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/22/MVVM%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/22/MVVM%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">MVVM学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-02-22 17:37:34" itemprop="dateCreated datePublished" datetime="2020-02-22T17:37:34+08:00">2020-02-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 15:49:13" itemprop="dateModified" datetime="2020-07-31T15:49:13+08:00">2020-07-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>用MVVM重新写了一遍CareFree之后所感：MVVM好像和MVP区别不大，就是Presenter变成了ViewModel。vm层持有view层和model层对象，通过接口回调进行交互。<br>感觉最大区别在于vm绑定了视图和数据，试图所有变化同步反应在vm，vm中数据的改变也会引起试图的改变。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/12/2019%E5%B0%8F%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/12/2019%E5%B0%8F%E7%BB%93/" class="post-title-link" itemprop="url">2019小结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-12 22:56:53" itemprop="dateCreated datePublished" datetime="2020-01-12T22:56:53+08:00">2020-01-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 15:49:13" itemprop="dateModified" datetime="2020-07-31T15:49:13+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="2019年——踏踏实实才是真，滑稽-⊙-⊙）。"><a href="#2019年——踏踏实实才是真，滑稽-⊙-⊙）。" class="headerlink" title="2019年——踏踏实实才是真，滑稽(⊙_⊙）。"></a>2019年——踏踏实实才是真，滑稽(⊙_⊙）。</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/01/12/2019%E5%B0%8F%E7%BB%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/12/%E5%A4%A7%E4%BA%8C%E5%AF%92%E5%81%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/12/%E5%A4%A7%E4%BA%8C%E5%AF%92%E5%81%87/" class="post-title-link" itemprop="url">大二寒假</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-12 00:27:24" itemprop="dateCreated datePublished" datetime="2020-01-12T00:27:24+08:00">2020-01-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-20 21:41:35" itemprop="dateModified" datetime="2021-01-20T21:41:35+08:00">2021-01-20</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/01/12/%E5%A4%A7%E4%BA%8C%E5%AF%92%E5%81%87/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/22/MVVM%E5%AD%A6%E4%B9%A0/" rel="prev" title="MVVM学习">
+      <i class="fa fa-chevron-left"></i> MVVM学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/02/%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E4%BF%A1%E6%81%AF%E6%8C%89%E5%BA%8F%E5%88%B0%E8%BE%BE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="next" title="异步回调信息按序到达解决方案">
+      异步回调信息按序到达解决方案 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/11/Jetpack-DataBinding%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/11/Jetpack-DataBinding%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">Jetpack--DataBinding简单使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-11 19:18:29" itemprop="dateCreated datePublished" datetime="2020-01-11T19:18:29+08:00">2020-01-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 15:49:13" itemprop="dateModified" datetime="2020-07-31T15:49:13+08:00">2020-07-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>数据绑定库(DataBinding)是一种支持库，借助该库，您可以使用声明性格式将布局中的界面组件绑定到应用中的数据源。 –谷歌</p>
-</blockquote>
-<p>意思就是,一些UI组件和应用的一些数据绑定在一起,数据改变&lt;—&gt;UI改变. 无需写代码,达到两者自动同步的效果.DataBinding通常用户MVVM模式在Android的实现.连接View和ViewModel.</p>
-<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>在app的gradel中加入代码</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">android&#123;</span><br><span class="line">    ...</span><br><span class="line">    dataBinding&#123;</span><br><span class="line">       enabled = true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/01/11/Jetpack-DataBinding%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/26/%E5%90%8C%E6%AD%A5hexo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0git%20page%E5%88%86%E6%94%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/26/%E5%90%8C%E6%AD%A5hexo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0git%20page%E5%88%86%E6%94%AF/" class="post-title-link" itemprop="url">同步hexo配置文件到git page分支</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-12-26 17:16:21" itemprop="dateCreated datePublished" datetime="2019-12-26T17:16:21+08:00">2019-12-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 15:49:13" itemprop="dateModified" datetime="2020-07-31T15:49:13+08:00">2020-07-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="为什么要同步hexo配置文件？"><a href="#为什么要同步hexo配置文件？" class="headerlink" title="为什么要同步hexo配置文件？"></a>为什么要同步hexo配置文件？</h2><ul>
-<li>问：通过执行hexo g; hexo d; 我的本地文件不是已经同步到github了吗?</li>
-<li>答：<strong>不！</strong> 并没有。让我们看一下博客本地目录
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/26/%E5%90%8C%E6%AD%A5hexo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0git%20page%E5%88%86%E6%94%AF/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/15/%E8%87%AA%E5%AE%9A%E4%B9%89View%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/09/15/%E8%87%AA%E5%AE%9A%E4%B9%89View%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">自定义View学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-15 15:46:32" itemprop="dateCreated datePublished" datetime="2019-09-15T15:46:32+08:00">2019-09-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-21 13:01:36" itemprop="dateModified" datetime="2021-01-21T13:01:36+08:00">2021-01-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="为什么要自定义View？"><a href="#为什么要自定义View？" class="headerlink" title="为什么要自定义View？"></a>为什么要自定义View？</h3><p>系统配置的View满足不了我们的需求，我们需要针对业务制作一个自己的View。</p>
-<h3 id="自定义一般View步骤"><a href="#自定义一般View步骤" class="headerlink" title="自定义一般View步骤"></a>自定义一般View步骤</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/09/15/%E8%87%AA%E5%AE%9A%E4%B9%89View%E5%AD%A6%E4%B9%A0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/Android%E4%BF%AE%E6%94%B9%E7%8A%B6%E6%80%81%E6%A0%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header_img_200x200.png">
-      <meta itemprop="name" content="Alec">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Alec's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/09/14/Android%E4%BF%AE%E6%94%B9%E7%8A%B6%E6%80%81%E6%A0%8F/" class="post-title-link" itemprop="url">Android修改状态栏</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-14 15:48:55" itemprop="dateCreated datePublished" datetime="2019-09-14T15:48:55+08:00">2019-09-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-31 15:49:13" itemprop="dateModified" datetime="2020-07-31T15:49:13+08:00">2020-07-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h5 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h5><p>这里的处理都是Android5.0以上的。</p>
-<h2 id="修改状态栏颜色"><a href="#修改状态栏颜色" class="headerlink" title="修改状态栏颜色"></a>修改状态栏颜色</h2><p><img src="https://img-blog.csdnimg.cn/20191004165832122.png" alt="在这里插入图片描述"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Window window = activity.getWindow();</span><br><span class="line">window.setStatusBarColor(Color.MAGENTA);</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/09/14/Android%E4%BF%AE%E6%94%B9%E7%8A%B6%E6%80%81%E6%A0%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
@@ -1052,6 +381,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E7%9A%84%E4%B8%89%E4%B8%AA%E4%B8%BB%E4%BD%93"><span class="nav-number">1.1.</span> <span class="nav-text">事件传递的三个主体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E7%9B%B8%E5%85%B3%E4%B8%89%E4%B8%AA%E7%BB%8F%E5%85%B8%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">事件分发机制相关三个经典函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E5%9B%9B%E4%B8%AA%E7%BB%8F%E5%85%B8%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">事件分发机制四个经典事件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E5%9C%BA%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">事件分发机制场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E6%8B%A6%E6%88%AA%E3%80%81%E4%B8%8D%E6%B6%88%E8%B4%B9"><span class="nav-number">2.1.</span> <span class="nav-text">不拦截、不消费</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ViewGroup%E6%8B%A6%E6%88%AA%E3%80%81%E6%97%A0%E6%B6%88%E8%B4%B9"><span class="nav-number">2.2.</span> <span class="nav-text">ViewGroup拦截、无消费</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ViewGoup%E6%B6%88%E8%B4%B9%EF%BC%8C%E4%B8%8D%E6%8B%A6%E6%88%AA"><span class="nav-number">2.3.</span> <span class="nav-text">ViewGoup消费，不拦截</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity%E7%9A%84dispatchTouchEvent-%E6%BA%90%E7%A0%81"><span class="nav-number">3.1.</span> <span class="nav-text">Activity的dispatchTouchEvent()源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ViewGroup%E7%9A%84dispatchTouchEvent-%E6%BA%90%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">ViewGroup的dispatchTouchEvent()源码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90"><span class="nav-number">3.2.0.1.</span> <span class="nav-text">总体逻辑分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E5%88%86%E6%9E%90%E4%B8%80"><span class="nav-number">3.2.0.2.</span> <span class="nav-text">具体分析一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E5%88%86%E6%9E%90%E4%BA%8C"><span class="nav-number">3.2.0.3.</span> <span class="nav-text">具体分析二</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View%E7%9A%84dispatchTouchEvent-%E6%BA%90%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text">View的dispatchTouchEvent()源码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
